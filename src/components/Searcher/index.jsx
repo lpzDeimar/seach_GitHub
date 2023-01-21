@@ -3,7 +3,7 @@ import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 
-const Searcher = ({ setStatus }) => {
+const Searcher = ({ setStatus, status }) => {
   const [input, setInput] = useState("");
 
   const onSearchValueChange = (e) => {
@@ -11,13 +11,10 @@ const Searcher = ({ setStatus }) => {
   };
 
   const handleSubmit = () => {
-    setStatus((oldStatus) => ({
-      ...oldStatus,
+    setStatus({
+      ...status,
       inputUser: input,
-    }));
-    setTimeout(() => {
-      setInput("");
-    }, 1000);
+    });
   };
 
   return (
@@ -25,7 +22,7 @@ const Searcher = ({ setStatus }) => {
       direction={"row"}
       sx={{
         marginTop: "40px",
-        width: "80%",
+        width: "90%",
       }}
     >
       <TextField
@@ -35,9 +32,10 @@ const Searcher = ({ setStatus }) => {
         variant="outlined"
         placeholder="LpzDeimar"
         size="small"
+        right="-48px"
         value={input}
         sx={{
-          width: "90%",
+          width: "100%",
         }}
       />
       <IconButton

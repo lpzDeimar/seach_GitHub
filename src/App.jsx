@@ -1,12 +1,35 @@
 import { Container } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Searcher from "./components/Searcher";
+import { gettingUsers } from "./services/users";
+import UserCard from "./containers/UserCard";
 
 export const App = () => {
   const [status, setStatus] = useState({
     inputUser: "Lpzdeimar",
     userStatus: "",
+    notFound: false,
   });
+
+  const gettingUser = async (user) => {
+    setStatus({ ...status, userStatus: await gettingUsers(user) });
+
+    if (status.inputUser === "Lpzdeimar") {
+      localStorage.setItem("gitHub", JSON.stringify(status.userStatus));
+    }
+
+    if (status.userStatus.message === "Not Found") {
+      setStatus({
+        ...status,
+        userStatus: JSON.parse(localStorage.getItem("gitHub")),
+      });
+      status.notFound = true;
+    }
+  };
+
+  useEffect(() => {
+    gettingUser(status.inputUser);
+  }, [status.inputUser]);
 
   return (
     <Container
@@ -21,7 +44,8 @@ export const App = () => {
         alignItems: "center",
       }}
     >
-      <Searcher setStatus={setStatus} />
+      <Searcher status={status} setStatus={setStatus} />
+      <UserCard status={status} />
     </Container>
   );
 };
